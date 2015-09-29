@@ -84,9 +84,9 @@ end
 xHat = zeros(size(x));  % You need to compute this
 U=u;
 U(:,k+1:end)=0;
-xHat = U'*x;
+xH  = U'*x;
 
-xHat=U*xHat;
+xHat=U*xH ;
 % Visualise the data, and compare it to the raw data
 % You should observe that the raw and processed data are of comparable quality.
 % For comparison, you may wish to generate a PCA reduced image which
@@ -104,8 +104,11 @@ display_network(x(:,randsel));
 
 epsilon = 0.1;
 xPCAWhite = zeros(size(x));
-
+uu=diag(S).^0.5+1e-1;
+uu=repmat(uu , [1,size(x,2) ]);
+xPCAWhite= xRot./uu;
 % -------------------- YOUR CODE HERE --------------------
+
 
 %%================================================================
 %% Step 4b: Check your implementation of PCA whitening
@@ -125,6 +128,9 @@ xPCAWhite = zeros(size(x));
 
 % -------------------- YOUR CODE HERE --------------------
 
+
+covar= xPCAWhite*xPCAWhite'/size(xPCAWhite,2 )      
+%covar= xRot*xRot'/size(xPCAWhite,2 )      
 % Visualise the covariance matrix. You should see a red line across the
 % diagonal against a blue background.
 figure('name','Visualisation of covariance matrix');
@@ -137,7 +143,7 @@ imagesc(covar);
 %  that whitening results in, among other things, enhanced edges.
 
 xZCAWhite = zeros(size(x));
-
+xZCAWhite= U*xPCAWhite;
 % -------------------- YOUR CODE HERE --------------------
 
 % Visualise the data, and compare it to the raw data.
